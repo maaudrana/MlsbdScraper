@@ -1,0 +1,23 @@
+import scrapy
+
+
+class MlsbdSpider(scrapy.Spider):
+    name = 'mlsbd'
+    allowed_domains = ['mlsbd.co']
+    start_urls = ['https://www.mlsbd.co/?paged=%s' % page for page in range(1,377)]
+
+    def parse(self, response):
+        all_link = response.xpath('//*[@class="post-desc"]/a/@href').extract()
+        for i in all_link:
+            yield scrapy.Request(i,callback=self.movie_link)
+    def movie_link(self,response):
+        def get_link():
+            Link = response.xpath('//*[@class="Dbtn sd"]/@href').extract_first()
+            if type(Link)==str:
+                return Link
+            else:
+                hdlink = response.xpath('//*[@class="Dbtn hd"]/@href').extract_first()
+                return hdlink
+        name = response.xpath('//*[@class="single-post-title"]/text()').extract_first()
+        yield{'Name':name[:20].replace('\n',''),
+        'Movie':get_link()}
