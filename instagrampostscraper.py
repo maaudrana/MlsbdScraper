@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jun  4 09:30:27 2019
 
-@author: Deepesh  Agrawal
-"""
 import csv
 import time
 from selenium import webdriver
